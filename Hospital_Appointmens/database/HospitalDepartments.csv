@@ -1,0 +1,11 @@
+DepID,DepName
+1,Surgeon
+2,Paediatric
+3,Orthopedics
+4,GeneralPr
+5,Urologist
+6,Neurology
+7,Cardiology
+8,Oculist
+9,Otolaryngologist
+10,Renal

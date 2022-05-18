@@ -1,0 +1,27 @@
+DoctorID,DoctorName,DoctorSurname,DoctorPhone,Gender,DepID,IsOnVacation
+1,Jack,Willson,380995552211,M,5,0
+2,Mia,Tarkosvkii,380667921156,W,5,0
+3,Max,Tierkis,380501234576,M,1,0
+4,Laura,Clark,380991652205,W,1,0
+5,Steve,Ostin,380934569821,M,1,1
+6,Olivia,Colman,380667814576,W,2,0
+7,Emma,Srone,380991793231,W,2,0
+8,Wes,Anderson,380956518943,M,3,0
+9,Eliot,Page,380991035264,M,4,0
+10,Alexander,Brown,380951545263,M,4,0
+11,Pamela,Goldammer,380661034798,W,4,0
+12,Robbie,Raian,380973479800,M,4,1
+13,John,Ottman,380735679800,M,4,1
+14,Spike ,Lee,380731034599,M,4,0
+15,Patrick,Vito,380667542166,M,4,0
+16,Dianne,Warren,380667820000,W,4,0
+17,Kendrick,Lamar,380666512207,M,6,0
+18,Andrew,Snowden,380502214546,M,6,1
+19,Will,Flatters,380667981122,M,7,0
+20,Patricia,DeHaney,380999992275,W,7,0
+21,Codack,Black,0986743301,M,7,1
+22,John,Sisnseniuk,380991031020,M,8,1
+23,Ludwig,Goransson,380734568910,M,8,0
+24,Mark,Spears,380502334561,M,9,1
+25,Adam,Driven,380990002253,M,9,0
+26,Anna,Rey,380771002286,W,10,1
