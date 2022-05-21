@@ -10,7 +10,11 @@ import csv
 import re
 import uuid
 import sqlite3
+import boto3
 from PIL import ImageTk, Image
+
+
+s3 = boto3.client('s3')
 
 ukraine_time = timezone('Europe/Kiev')
 ua_time = datetime.now(ukraine_time)
@@ -29,7 +33,7 @@ def save_info():
     password_info = password.get()
     
     b_day = datetime.strptime(date_info, "%d-%m-%Y")
-   
+
     if b_day.date() > ua_time.date():
         messagebox.showwarning(title="Error",message="Warning: Enter a valid Date of Birh!")
         return -1
@@ -90,7 +94,7 @@ def save_info():
              phone_info,
              date_info)
         
-       y = (key, password_info)
+        y = (key, password_info)
         
         cur.execute("insert into HospitalClients values(?,?,?,?,?,?,?)",x)
         con.commit()
@@ -101,7 +105,22 @@ def save_info():
         f = open("logs/userID.txt", "w+")
         f.write(key)
         f.close()
-             
+        
+        cur.execute("Select * from HospitalClients")
+        
+        
+        results = cur.fetchall()
+        headers = [i[0] for i in cur.description]
+
+       
+        with open('database/HospitalClients.csv', 'w', newline='') as userfile:
+            csvFile = csv.writer(userfile,delimiter=',', lineterminator='\r\n', escapechar='\\') 
+
+            csvFile.writerow(headers)
+            csvFile.writerows(results)
+            userfile.close()
+
+        s3.upload_file("/Users/vkadi/OneDrive/Робочий стіл/Hospital_Appointmens/database/HospitalClients.csv", "hospital-clients","HospitalClients.csv")
         messagebox.showinfo(title="Loading data",message="Loaded data succesfully \n Your id = "+key)
         Appointment()
 
@@ -219,14 +238,14 @@ btn=ttk.Button(screen, text="Register", command=save_info)
 btn=ttk.Button(screen,width="20", text="Register", command=save_info)
 btn.place(x=180,y=445)
 
-btn_page=Button(screen, text="Create Appointment",
-                bg="#4abca5",fg="white",width="31",command=AppointmentPage)
-btn_page.place(x=0, y=70)
-btn_page.config(font=("Helvitica", 10, "bold"))
+btn_page2=Button(screen, text="Create Appointment",
+                bg="#4abca5",fg="white",width="30",command=AppointmentPage)
+btn_page2.place(x=0, y=70)
+btn_page2.config(font=("Helvitica", 10, "bold"))
 
-btn_page=Button(screen, text="Hospital Info",
-                bg="#4abca5", fg="white",width="30",command=infoPage)
-btn_page.place(x=250, y=70)
-btn_page.config(font=("Helvitica", 10, "bold"))
+btn_page1=Button(screen, text="Hospital Info",
+                bg="#4abca5", fg="white",width="31",command=infoPage)
+btn_page1.place(x=245, y=70)
+btn_page1.config(font=("Helvitica", 10, "bold"))
 screen.mainloop()
 

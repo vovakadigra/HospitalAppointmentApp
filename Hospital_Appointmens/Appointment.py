@@ -96,6 +96,20 @@ def save_info():
                 cur.execute("insert into HospitalAppointments values(?,?,?,?,?,?,?,?)",z)
                 con.commit()
 
+                cur.execute("Select * from HospitalAppointments")
+        
+        
+                results_appo = cur.fetchall()
+                headers = [i[0] for i in cur.description]
+
+       
+                with open('database/HospitalAppointments.csv', 'w', newline='') as userfile:
+                    csvFile = csv.writer(userfile,delimiter=',', lineterminator='\r\n', escapechar='\\') 
+
+                    csvFile.writerow(headers)
+                    csvFile.writerows(results_appo)
+                    userfile.close()
+
                 
                 messagebox.showinfo(title="Error",message="Appointment to a doctor created successfully ")   
             else:
@@ -113,16 +127,16 @@ screen.minsize(500, 550)
 screen.maxsize(500, 550)
 
 notebook = Notebook(screen)
-frame1 = Frame(notebook, width=500, height=580)
+frame1 = Frame(notebook, width=500, height=550)
 notebook.add(frame1, text = 'Create Appointment')
 
-frame2 = Frame(notebook, width=500, height=580)
+frame2 = Frame(notebook, width=500, height=550)
 notebook.add(frame2, text = '  My Appointment  ')
 
-frame3 = Frame(notebook, width=500, height=580)
+frame3 = Frame(notebook, width=500, height=550)
 notebook.add(frame3, text = '   My Profile  ')
 
-frame4 = Frame(notebook, width=500, height=580)
+frame4 = Frame(notebook, width=500, height=550)
 notebook.add(frame4, text = ' Doctors Info ')
 
 notebook.pack(expand=1, fill='both', padx=7, pady=7)
@@ -603,7 +617,7 @@ tree2.column("#4",width=110)
 tree2.heading("#4", text="AVG Score")
 
 button1 = ttk.Button(frame4,text="Show data",command=lambda: [clear_all2(), View2()],width="15")
-button1.place(x=350,y=380)
+button1.place(x=180,y=380)
 
 tree.bind('<ButtonRelease-1>', selectItem2)
 screen.mainloop()
