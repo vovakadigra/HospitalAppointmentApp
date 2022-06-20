@@ -137,10 +137,10 @@ heading = Label(text="Hospital Clinic №2", bg="#4abca5", fg="#FFFFFF", width="
 heading.config(font=("Helvitica", 24))
 heading.pack()
 
-
+today_cal = date.today()
 cal = Calendar(screen,fieldbackground='#FFFFFF',background='#4abca5',selectbackground='#4abca5',weekendbackground='#d5edec', othermonthwebackground='#d5edec', headersbackground='white',foreground='#FFFFFF',arrowcolor='white', selectmode = 'day',
-               year = 2022, month = 5,
-               day = 10,date_pattern='dd-mm-yyyy')
+               year = today_cal.year, month = today_cal.month,
+               day = today_cal.day,date_pattern='dd-mm-yyyy')
 canvas = Canvas(heading ,background='#4abca5', width = 50, height = 50,highlightthickness=0, relief='ridge')      
 canvas.place(x=45, y=12)
 pilImage = Image.open("img\logo.png")
@@ -244,7 +244,7 @@ btn_page2.place(x=0, y=70)
 btn_page2.config(font=("Helvitica", 10, "bold"))
 
 btn_page1=Button(screen, text="Hospital Info",
-                bg="#4abca5", fg="white",width="31",command=infoPage)
+                bg="#4abca5", fg="white",width="32",command=infoPage)
 btn_page1.place(x=245, y=70)
 btn_page1.config(font=("Helvitica", 10, "bold"))
 screen.mainloop()

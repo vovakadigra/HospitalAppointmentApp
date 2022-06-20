@@ -56,16 +56,19 @@ def save_info():
     cur.close()
     doc_id_withcoma="".join(map(str,doc_dblist))
     doctor_info = doc_id_withcoma.replace(",", "").replace("(","").replace(")","")
-
-    today = datetime.today().strftime('%d-%m-%Y')
-    todayfr = today
+    
+    today_datetime = datetime.today()
+    today_date = today_datetime.date()
+    today = datetime.strptime(str(today_date), '%Y-%m-%d').strftime('%d-%m-%Y')
     date_info = cal.get_date()
+    appo_day = datetime.strptime(date_info, "%d-%m-%Y")
+    appo_date = appo_day.date()
     time_info=myCombo_timepicker.get()
     key=(str(uuid.uuid4().fields[-1])[:10])
     status="Pending"
 
-    if(date_info < todayfr):
-        messagebox.showwarning(title="Error",message="Warning: Enter valid appointment date! ")
+    if(appo_date < today_date):
+        messagebox.showwarning(title="Error",message="Warning: Choose valid appointment date! ")
     else:
         if (not userid_info.isdigit()):
             messagebox.showwarning(title="Error",message="Warning: Enter valid login! ")
@@ -111,11 +114,10 @@ def save_info():
                     userfile.close()
 
                 
-                messagebox.showinfo(title="Error",message="Appointment to a doctor created successfully ")   
+                messagebox.showinfo(title="Status",message=("Appointment to a doctor created successfully. \n Your appointment is on "+ date_info + "," +time_info))   
             else:
                 messagebox.showwarning(title="Error",message="Warning: Enter valid login ")
                 return -1
-
 
 def comboclick(event):
     myLabel = Label(screen).pack()
@@ -153,10 +155,10 @@ img = ImageTk.PhotoImage(pilImage)
 imgs =canvas.create_image(0, 0, anchor=NW,image=img) 
 
 options_timepicker = [ "10:00","10:30","11:00","11:30","12:00","12:30","13:00","14:30","15:00","15:30","16:30","16:00","16:30","17:00","17:30"]
-
+today_cal = date.today()
 cal = Calendar(frame1,fieldbackground='#FFFFFF',background='#4abca5',selectbackground='#4abca5',weekendbackground='#d5edec', othermonthwebackground='#d5edec', headersbackground='white',foreground='#FFFFFF',arrowcolor='white', selectmode = 'day',
-               year = 2022, month = 5,
-               day = 11,date_pattern='dd-mm-yyyy')
+               year = today_cal.year, month = today_cal.month,
+               day = today_cal.day,date_pattern='dd-mm-yyyy')
 
 def grad_date():
     date.config(text = "Date is: " + cal.get_date())
@@ -240,15 +242,17 @@ def vis_que():
         appoid=itemgetter(5)(b)
         
         if appost !="Closed":
-            messagebox.showwarning(title="Visitor questionnaire ",message='You can only create a visitor questionnaire'
+            messagebox.showwarning(title="Visitor questionnaire ",message='You can only create a visitor questionnaire on'
                                   '\non field with status "Closed"')
             return -1
         else:
-            f=open("logs/user_appointment.txt","w+")
-            f.write(str(appoid))
+            
+            with open("logs/user_appointment.txt","w+") as fileappo:
+                fileappo.write(str(appoid))
+                fileappo.close()
 
-            screen.destroy()
-            import Form
+                screen.destroy()
+                import Form
     
 def updateItem():
     curItem = tree.focus()
@@ -262,8 +266,8 @@ def updateItem():
         appost=itemgetter(4)(iscanceled_checker)
 
         appdict = (tree.item(curItem))
-        b=(appdict.get('values', 5))
-        appoid=itemgetter(5)(b)
+        outcome=(appdict.get('values', 5))
+        appoid_cancel=itemgetter(5)(outcome)
         
         if appost =="Canceled":
             
@@ -273,7 +277,7 @@ def updateItem():
             MsgBox = messagebox.askquestion ('Exit Application','Are you sure that you want to cancel appointment?',icon = 'warning')
             if MsgBox == 'yes':
                 cur7 = con.cursor()
-                cur7.execute("UPDATE HospitalAppointments SET AppointmentStatus = 'Canceled' Where AppointmentID = ?",(appoid,))
+                cur7.execute("UPDATE HospitalAppointments SET AppointmentStatus = 'Canceled' Where AppointmentID = ?",(appoid_cancel,))
                 con.commit()
                 messagebox.showinfo(title="Cancelled  appointment ",message="Your appointment  was canceled")
             
@@ -287,20 +291,15 @@ def View():
     with open("logs/userID.txt") as f:
         user_id = f.read()
         if len(user_id) != 0:
-            cur1.execute("UPDATE HospitalAppointments Set AppointmentStatus='Closed'  WHERE AppointmentDate < strftime('%d-%m-%Y', Date()) AND  AppointmentStatus Not IN('Evaluated','Canceled')")
+            cur1.execute("UPDATE HospitalAppointments Set AppointmentStatus='Closed' where AppointmentStatus Not IN('Evaluated','Canceled') AND substr(AppointmentDate,7)||substr(AppointmentDate,4,2)||substr(AppointmentDate,1,2) < strftime('%Y%m%d','now')")
             con.commit()
             cur1.execute("SELECT hde.DepName,(hd.DoctorName ||' '|| hd.DoctorSurname)as DoctorFullmame,AppointmentDate,AppointmentDateTime,AppointmentStatus,AppointmentID FROM HospitalAppointments ha  JOIN HospitalDoctors hd ON hd.DoctorID=ha.DoctorID JOIN HospitalDepartments hde ON ha.DepartmentID=hde.DepID WHERE ClientID = ?",(user_id,))
             rows = cur1.fetchall()
             cur1.close()
             if len(rows) == 0:
                 import tkinter
-                MsgBox = tkinter.messagebox.askquestion ('Exit Application','It seems like you don`t have any appointments yet.'
-                                                         '\nDo you want to create one?',icon = 'warning')
-                if MsgBox == 'yes':
-                    screen.destroy()
-                    import Appointment
-                else:
-                    return -1
+                MsgBox = tkinter.messagebox.showwarning(title="Warning",message='It seems like you don`t have any appointments yet.')
+                return -1
             else:
                 for row in rows:
                     tree.insert("", END, values=row)        
@@ -313,14 +312,14 @@ def calculate_age(dateofbirth_clinfo):
     return today.year - dateofbirth_clinfo.year - ((today.month, today.day) < (dateofbirth_clinfo.month, dateofbirth_clinfo.day))
 
 
-global appoid
+
 with open("logs/userID.txt") as f:
     user_idinfo = f.read()
     f.close()
     
  
 cur3 = con.cursor()
-rows = cur3.execute("SELECT Firstname || ' ' || Lastname as Fullname,Country,DateOfBirth,Phone,hd.UserPassword FROM HospitalClients hc  JOIN HospitalClientsCred hd ON hd.UserID=hc.CliendID  WHERE CliendID = ?",(user_idinfo,))
+rows = cur3.execute("SELECT Firstname || ' ' || Lastname as Fullname,Country,DateOfBirth,Phone,hd.UserPassword FROM HospitalClients hc  JOIN HospitalClientsCred hd ON hd.UserID=hc.ClientID  WHERE ClientID = ?",(user_idinfo,))
 for rows_client in cur3.fetchall():
     fullname_cl = ([rows_client [index] for index in [0]])
     fullname_cl_withcoma="".join(map(str,fullname_cl))
@@ -414,7 +413,7 @@ def update_info():
             messagebox.showwarning(title="Error",message="Warning: Enter a valid Phone number")
             return -1
         cur4=con.cursor()
-        cur4.execute("Select Phone,CliendID From HospitalClients Where Phone = ? And CliendID != ?",(str(updated_phone),str(user_id_info),))
+        cur4.execute("Select Phone,CliendID From HospitalClients Where Phone = ? And ClientID != ?",(str(updated_phone),str(user_id_info),))
         if cur4.fetchone():
             messagebox.showwarning(title="Eror",message="This number is already registered on the app")
             return -1
@@ -424,7 +423,7 @@ def update_info():
         cur5.execute("Select UserID From HospitalClientsCred Where UserID = ? And UserPassword = ?",(str(user_id_info),str(old_pwd),))
         if cur5.fetchone():
             cur5.execute("UPDATE HospitalClientsCred SET UserPassword = ? Where UserID = ?",(str(new_pwd),str(user_id_info),))
-            cur5.execute("UPDATE HospitalClients SET Phone = ? WhERE CliendID = ?",(str(updated_phone),str(user_id_info)))
+            cur5.execute("UPDATE HospitalClients SET Phone = ? WhERE ClientID = ?",(str(updated_phone),str(user_id_info)))
             con.commit()                                                                            
 
             messagebox.showinfo(title="Updating data",message="Updated data succesfully")
@@ -563,7 +562,7 @@ def View2():
                             WHERE AppointmentStatus In("Closed","Evaluated")
                             GROUP  BY  ha.DoctorID)
                     SELECT DoctorName || ' '  || DoctorSurname as DocName,DepName,total_appo,
-                    IFNULL(avg_evaluation, 'No score')avg_evaluation FROM cte
+                    IFNULL(avg_evaluation, 'No score yet')avg_evaluation FROM cte
                     LEFT JOIN cte1
                     ON cte.DoctorID=cte1.DoctorID
                     JOIN HospitalDoctors hd
@@ -610,7 +609,7 @@ tree2.heading("#1", text="Doctor Name")
 tree2.column("#2", minwidth=0 ,width=110)
 tree2.heading("#2", text="Department")
 
-tree2.column("#3",width=110)
+tree2.column("#3",minwidth=20,width=110)
 tree2.heading("#3", text="Total Appointments")
 
 tree2.column("#4",width=110)

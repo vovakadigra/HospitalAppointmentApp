@@ -1,4 +1,6 @@
-CliendID,Firstname,Lastname,Gender,Country,Phone,DateOfBirth
+ClientID,Firstname,Lastname,Gender,Country,Phone,DateOfBirth
+1167687,Jack,Ivak,Male,Algeria,380734467821,08-06-1983
+1196965,Valeria,Nizhinka,Female,Romania,380675422188,19-03-1996
 1226931,Volodymyr,Bezdil,Male,Algeria,380991795507,14-01-2003
 1264274,Annet,Jute,Female,Slovenia,380501233212,12-05-1992
 1354857,Alina,Jacobs,Female,Albania,380991795520,03-05-2022
@@ -6,10 +8,12 @@ CliendID,Firstname,Lastname,Gender,Country,Phone,DateOfBirth
 1453488,Annet,Jacob,Female,Japan,380503229876,04-06-2003
 1455628,Jack,Sparrow,Male,Dominica,380966441132,21-01-2001
 1490853,Mia,Clark,Female,United States,380995556789,06-04-1995
+1541791,Maria,Lyakhovych,Female,Serbia,380991791212,16-06-1999
 1971070,Vlad,Koval,Male,Morocco,380995507133,26-01-2003
 1972162,Lana,Rey,Female,Ukraine,380977116496,25-01-2009
 2026077,Derec,Krab,Male,Ukraine,380991796600,17-11-2000
 2054130,Vlad,Simon,Male,Ukraine,380991795520,12-05-1999
+2083177,Mia,Jacobs,Female,Switzerland,380995552656,19-06-1996
 2098377,Anna,Lanko,Female,Israel,380995054322,11-05-2004
 2196079,Olivia,Burn,Female,Poland,380667921113,11-01-1997
 2230010,Vlad,Collins,Male,Afghanistan,380667923614,14-01-2001
@@ -20,6 +24,7 @@ CliendID,Firstname,Lastname,Gender,Country,Phone,DateOfBirth
 2630836,Derec,Syecks,Male,Croatia,380504444123,18-05-1995
 2768191,Faji,Drue,Male,Afghanistan,380668790023,24-09-2009
 2782823,Volodymyr,Kadihra,Male,Ukraine,380991715507,12-12-2000
+2787177,Diana,Datil,Female,France,380735589023,22-06-2000
 2824381,Anna,Duretal,Female,Slovenia,380951557708,11-05-1999
 3831137,Annet,Clark,Female,Romania,380991795570,30-05-1985
 3992752,Jack,Has,Male,Dominica,380951535263,14-01-1995

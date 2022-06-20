@@ -112,11 +112,11 @@ def ClearText():
   t.delete('1.0', END)
   
 
-evald_text = Label(font=(None, 11),text="Evaluation of the doctor's work: ", )
-evalh_text = Label( font=(None, 11),text="Total evaluation of the visit: ", )
+evald_text = Label(font=(None, 11),text="Doctor's work evaluation:: *", )
+evalh_text = Label( font=(None, 11),text="Total evaluation of the visit: *", )
 
 comment_text = Label(text="Comments: * ", )
-evald_text.place(x=260, y=151)
+evald_text.place(x=260, y=150)
 evalh_text.place(x=30, y=150)
 comment_text.place(x=30,y=230)
 
@@ -130,6 +130,7 @@ t.place(x=30,y=260, width=440,height=200)
   
 scroll.config(command=t.yview)
 scroll.pack(side=RIGHT, fill=Y)
+
 
 V1 = ttk.Radiobutton(screen,state=NORMAL,text="1", variable=visit_doctor, value="1")
 V2 = ttk.Radiobutton(screen,state=NORMAL, text="2", variable=visit_doctor, value="2")

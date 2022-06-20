@@ -49,7 +49,7 @@ def check_info():
 
 screen = ThemedTk(theme="breeze")
 screen.geometry("300x270")
-screen.title("Registration form")
+screen.title("Login")
 
 heading = Label(text="Private Clinic №2", bg="#4abca5", fg="#FFFFFF", width="500", height="2")
 heading.config(font=("Helvitica", 22))
