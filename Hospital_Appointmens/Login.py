@@ -15,9 +15,20 @@ def Registration():
     screen.destroy()
     import Register  
 
+
 def AppointmentPage():
     screen.destroy()
     import Appointment
+
+def AdminPage():
+    screen.destroy()
+    import AdminPanel
+
+def RedirectAction(userid_info):
+    if userid_info == 'Admin':
+        AdminPage()
+    else:
+        AppointmentPage()
 
 def check_info():
     userid_info = user_id.get()
@@ -28,7 +39,7 @@ def check_info():
     if len(userid_info)== 0 and len(password_info)>=6:
         messagebox.showwarning(title="Error",message="Warning: Enter valid login and password!")
         return -1
-    if not userid_info.isdigit():
+    if not userid_info.isdigit() and  userid_info != 'Admin':
         messagebox.showwarning(title="Error",message="Warning: Id consist only of numbers!")
         return -1
 
@@ -39,7 +50,7 @@ def check_info():
             f = open("logs/userID.txt", "w+")
             f.write(userid_info)
             f.close()
-            AppointmentPage()
+            RedirectAction(userid_info)
             
             
             
